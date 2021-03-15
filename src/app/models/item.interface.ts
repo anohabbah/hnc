@@ -1,3 +1,5 @@
+import {Observable} from 'rxjs';
+
 export interface Item {
   id: number;
   title: string;
@@ -11,5 +13,5 @@ export interface Items {
   offset: number;
   limit: number;
   total?: number;
-  results: Item[];
+  results: Observable<Item>[];
 }
