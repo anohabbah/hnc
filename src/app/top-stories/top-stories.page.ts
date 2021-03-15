@@ -9,18 +9,28 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./top-stories.page.scss'],
 })
 export class TopStoriesPage implements OnInit, OnDestroy {
-  items: Items = { offset: 0, limit: 0, results: [] };
+  items: Items = [];
   subscription: Subscription | null = null;
+  private offset = 0;
+  private limit = 10;
 
   constructor(private itemService: ItemService) {}
 
   ngOnInit(): void {
-    this.subscription = this.itemService.load(0, 10).subscribe(items => this.items = items);
+    this.subscription = this.itemService.get().subscribe(items => this.items = items);
+
+    this.doLoad(true);
   }
 
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  private doLoad(refresh: boolean): void {
+    this.itemService.load({ offset: this.offset, limit: this.limit, refresh });
+
+    this.offset += this.limit;
   }
 }
