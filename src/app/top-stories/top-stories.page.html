@@ -5,5 +5,13 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-refresher slot="fixed" [disabled]="!canRefresh()" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <hnc-items [items]="items"></hnc-items>
+
+  <ion-infinite-scroll [disabled]="!hasNext()" (ionInfinite)="load($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

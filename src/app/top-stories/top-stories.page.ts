@@ -11,13 +11,18 @@ import { Subscription } from 'rxjs';
 export class TopStoriesPage implements OnInit, OnDestroy {
   items: Items = [];
   subscription: Subscription | null = null;
+
   private offset = 0;
   private limit = 10;
+  private infiniteScrollComponent: any;
+  private refresherComponent: any;
 
   constructor(private itemService: ItemService) {}
 
   ngOnInit(): void {
-    this.subscription = this.itemService.get().subscribe(items => this.items = items);
+    this.subscription = this.itemService.get().subscribe((items) => {
+      this.items = items;
+    });
 
     this.doLoad(true);
   }
@@ -27,6 +32,13 @@ export class TopStoriesPage implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
   }
+
+  load(event: any): void {
+    this.infiniteScrollComponent = event.target;
+
+    this.next();
+  }
+
 
   hasPrevious(): boolean {
     return this.offset > 0;
@@ -58,7 +70,12 @@ export class TopStoriesPage implements OnInit, OnDestroy {
     return !!this.items;
   }
 
-  refresh(): void {
+  refresh(event: any): void {
+    this.refresherComponent = event.target;
+    this.doRefresh();
+  }
+
+  private doRefresh(): void {
     if (!this.canRefresh()) {
       return;
     }
@@ -69,5 +86,17 @@ export class TopStoriesPage implements OnInit, OnDestroy {
 
   private doLoad(refresh: boolean): void {
     this.itemService.load({ offset: this.offset, limit: this.limit, refresh });
+  }
+
+  private notifyScrollComplete(): void {
+    if (this.infiniteScrollComponent) {
+      this.infiniteScrollComponent.complete();
+    }
+  }
+
+  private notifyRefreshComplete(): void {
+    if (this.refresherComponent) {
+      this.refresherComponent.complete();
+    }
   }
 }
