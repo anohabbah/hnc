@@ -28,9 +28,46 @@ export class TopStoriesPage implements OnInit, OnDestroy {
     }
   }
 
-  private doLoad(refresh: boolean): void {
-    this.itemService.load({ offset: this.offset, limit: this.limit, refresh });
+  hasPrevious(): boolean {
+    return this.offset > 0;
+  }
+
+  previous(): void {
+    if (!this.hasPrevious()) {
+      return;
+    }
+
+    this.offset -= this.limit;
+    this.doLoad(false);
+  }
+
+  hasNext(): boolean {
+    return this.items && this.offset + this.limit < 100;
+  }
+
+  next(): void {
+    if (!this.hasNext()) {
+      return;
+    }
 
     this.offset += this.limit;
+    this.doLoad(false);
+  }
+
+  canRefresh(): boolean {
+    return !!this.items;
+  }
+
+  refresh(): void {
+    if (!this.canRefresh()) {
+      return;
+    }
+
+    this.offset = 0;
+    this.doLoad(true);
+  }
+
+  private doLoad(refresh: boolean): void {
+    this.itemService.load({ offset: this.offset, limit: this.limit, refresh });
   }
 }
