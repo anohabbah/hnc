@@ -1,4 +1,5 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
 
 # compiled output
 /dist
@@ -9,6 +10,21 @@
 
 # dependencies
 /node_modules
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
+
+*.log
+log.txt
+npm-debug.log*
 
 # profiling files
 chrome-profiler-events*.json
@@ -21,7 +37,6 @@ speed-measure-plugin*.json
 .c9/
 *.launch
 .settings/
-*.sublime-workspace
 
 # IDE - VSCode
 .vscode/*
@@ -42,5 +57,10 @@ testem.log
 /typings
 
 # System Files
-.DS_Store
-Thumbs.db
+/.ionic
+/.sourcemaps
+/.versions
+/.vscode
+/platforms
+/plugins
+/www

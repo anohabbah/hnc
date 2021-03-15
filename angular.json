@@ -1,38 +1,41 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
+  "defaultProject": "hacker-news-app",
   "newProjectRoot": "projects",
   "projects": {
     "hacker-news-app": {
+      "root": "",
+      "sourceRoot": "src",
       "projectType": "application",
+      "prefix": "hnc",
       "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
         "@schematics/angular:application": {
           "strict": true
         }
       },
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "hnc",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/hacker-news-app",
+            "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
+              },
+              {
+                "glob": "**/*.svg",
+                "input": "node_modules/ionicons/dist/ionicons/svg",
+                "output": "./svg"
+              }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/theme/variables.scss", "src/global.scss"],
             "scripts": []
           },
           "configurations": {
@@ -47,21 +50,20 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ]
+            },
+            "ci": {
+              "progress": false
             }
           }
         },
@@ -73,6 +75,9 @@
           "configurations": {
             "production": {
               "browserTarget": "hacker-news-app:build:production"
+            },
+            "ci": {
+              "progress": false
             }
           }
         },
@@ -89,14 +94,26 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "styles": [],
+            "scripts": [],
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
+              {
+                "glob": "favicon.ico",
+                "input": "src/",
+                "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets"
+              }
+            ]
+          },
+          "configurations": {
+            "ci": {
+              "progress": false,
+              "watch": false
+            }
           }
         },
         "lint": {
@@ -107,9 +124,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -121,11 +136,48 @@
           "configurations": {
             "production": {
               "devServerTarget": "hacker-news-app:serve:production"
+            },
+            "ci": {
+              "devServerTarget": "hacker-news-app:serve:ci"
+            }
+          }
+        },
+        "ionic-cordova-build": {
+          "builder": "@ionic/angular-toolkit:cordova-build",
+          "options": {
+            "browserTarget": "hacker-news-app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "hacker-news-app:build:production"
+            }
+          }
+        },
+        "ionic-cordova-serve": {
+          "builder": "@ionic/angular-toolkit:cordova-serve",
+          "options": {
+            "cordovaBuildTarget": "app:ionic-cordova-build",
+            "devServerTarget": "hacker-news-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "cordovaBuildTarget": "hacker-news-app:ionic-cordova-build:production",
+              "devServerTarget": "hacker-news-app:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "hacker-news-app"
+  "cli": {
+    "defaultCollection": "@ionic/angular-toolkit"
+  },
+  "schematics": {
+    "@ionic/angular-toolkit:component": {
+      "styleext": "scss"
+    },
+    "@ionic/angular-toolkit:page": {
+      "styleext": "scss"
+    }
+  }
 }
