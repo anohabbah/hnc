@@ -1,0 +1,9 @@
+<ion-list lines="full" *ngIf="items && items.length">
+  <ion-item *ngFor="let item of items">
+    <hnc-item [item]="item"></hnc-item>
+  </ion-item>
+</ion-list>
+
+<p *ngIf="items && !items.length">No items.</p>
+
+<p *ngIf="!items">Loading...</p>
