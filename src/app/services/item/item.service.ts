@@ -4,7 +4,7 @@ import { Items } from '@hnc/models/item.interface';
 
 @Injectable()
 export class ItemService {
-  load(): Observable<Items> {
+  load(offset: number, limit: number): Observable<Items> {
     return of({
       offset: 0,
       limit: 0,

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Items } from '@hnc/models/item.interface';
+import { Item } from '@hnc/models/item.interface';
 
 @Component({
   selector: 'hnc-items',
@@ -9,5 +9,5 @@ import { Items } from '@hnc/models/item.interface';
 })
 export class ItemsComponent {
   @Input()
-  items!: Items;
+  items!: Item[];
 }
