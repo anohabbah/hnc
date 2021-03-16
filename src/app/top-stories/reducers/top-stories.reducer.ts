@@ -23,3 +23,9 @@ const topStoriesReducer = createReducer(
 export function reducer(state: State | undefined, action: Action): State {
   return topStoriesReducer(state, action);
 }
+
+export const getIds = (state: State) => state.ids;
+
+export const getLoading = (state: State) => state.loading;
+
+export const getError = (state: State) => state.error;

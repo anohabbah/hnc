@@ -30,7 +30,7 @@ export class TopStoriesEffects {
   loadMore$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(TopStoriesActions.loadMore),
     withLatestFrom(this.store),
-    map(([action, state]) => {
+    map(([_, state]) => {
       const {
         pagination: {
           offset,
@@ -40,7 +40,7 @@ export class TopStoriesEffects {
           ids,
         }
       } = state.topStories;
-      return ItemActions.load(ids.slice(offset, offset + limit));
+      return ItemActions.load({ payload: ids.slice(offset, offset + limit) });
     })
   ));
 

@@ -1,5 +1,5 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Action, createReducer, on } from '@ngrx/store';
+import {Action, createFeatureSelector, createReducer, on} from '@ngrx/store';
 
 import * as ItemActions from '../actions/item.action';
 import { Item } from '@hnc/models/item.interface';
@@ -29,3 +29,11 @@ const itemReducer = createReducer(
 export function reducer(state: State | undefined, action: Action): State {
   return itemReducer(state, action);
 }
+
+export const getItemsState = createFeatureSelector<State>('items');
+
+export const { selectEntities: getItemEntities } = adapter.getSelectors(getItemsState);
+
+export const getLoading = (state: State) => state.loading;
+
+export const getError = (state: State) => state.error;
