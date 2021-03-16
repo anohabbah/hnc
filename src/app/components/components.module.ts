@@ -5,8 +5,10 @@ import {ItemComponent} from '@hnc/components/item/item.component';
 import { TimeAgoPipe } from './time-ago/time-ago.pipe';
 import {ItemsComponent} from '@hnc/components/items/items.component';
 import {IonicModule} from '@ionic/angular';
+import {CommentComponent} from '@hnc/components/comment/comment.component';
+import {CommentListComponent} from '@hnc/components/comment-list/comment-list.component';
 
-const DECLARATIONS = [ItemComponent, ItemsComponent];
+const DECLARATIONS = [ItemComponent, ItemsComponent, CommentComponent, CommentListComponent];
 
 @NgModule({
   declarations: [...DECLARATIONS, TimeAgoPipe],
