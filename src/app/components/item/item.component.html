@@ -19,5 +19,13 @@
       <ion-icon name="link"></ion-icon>
       {{ item.url }}
     </span>
+    <ion-button
+      *ngIf="item.kids"
+      fill="clear"
+      [routerLink]="['/comments', item.id]"
+    >
+      <ion-icon slot="icon-only" name="chatbubbles"></ion-icon>
+      {{ item.kids.length }}
+    </ion-button>
   </div>
 </div>
