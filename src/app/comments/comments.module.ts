@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import * as fromState from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { CommentsEffectEffects } from './effects/comments-effect.effects';
+import {ComponentsModule} from '@hnc/components/components.module';
 
 @NgModule({
   imports: [
@@ -18,8 +19,9 @@ import { CommentsEffectEffects } from './effects/comments-effect.effects';
     FormsModule,
     IonicModule,
     CommentsPageRoutingModule,
-    StoreModule.forFeature(fromState.stateFeatureKey, fromState.reducers, { metaReducers: fromState.metaReducers }),
-    EffectsModule.forFeature([CommentsEffectEffects])
+    StoreModule.forFeature(fromState.stateFeatureKey, fromState.reducers),
+    EffectsModule.forFeature([CommentsEffectEffects]),
+    ComponentsModule
   ],
   declarations: [CommentsPage]
 })

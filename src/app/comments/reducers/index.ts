@@ -1,8 +1,4 @@
-import {
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-} from '@ngrx/store';
+import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 
 import * as fromComments from './comments.reducer';
 import * as fromPagination from './pagination.reducer';
@@ -26,7 +22,7 @@ export const reducers: ActionReducerMap<CommentState> = {
   pagination: fromPagination.reducer,
 };
 
-export const getCommentsFeatureState = createFeatureSelector <CommentState>('comments');
+export const getCommentsFeatureState = createFeatureSelector<CommentState>('comments');
 
 export const getCommentsState = createSelector(
   getCommentsFeatureState,
@@ -54,7 +50,13 @@ export const getSelectedItemChildren = createSelector(
   getItemEntities,
   getPaginationState,
   (item, entities, pagination) => {
-    return item ? (item.kids || []).slice(0, pagination.offset + pagination.limit)
-      .map(id => entities[id]) : [] as Items;
+    return (
+      item
+        ? (item.kids || [])
+          .slice(0, pagination.offset + pagination.limit)
+          .map(id => entities[id])
+          .filter(it => !!it)
+        : []
+    ) as Items;
   }
 );
