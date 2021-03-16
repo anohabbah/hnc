@@ -13,8 +13,9 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { reducers } from './reducers';
+import {CustomRouterStateSerializer, reducers} from './reducers';
 import { ItemEffects } from './effects/item.effects';
+import {RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { ItemEffects } from './effects/item.effects';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     StoreModule.forRoot(reducers ),
+    StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     EffectsModule.forRoot([ItemEffects]),
     StoreDevtoolsModule.instrument({
       name: 'NgRx HNC Devtools',
@@ -35,6 +37,7 @@ import { ItemEffects } from './effects/item.effects';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
     InAppBrowser,
   ],
   bootstrap: [AppComponent],
