@@ -1,7 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ItemService } from '@hnc/services/item/item.service';
+import { from, Observable, Subscription } from 'rxjs';
+import { concatMap, filter } from 'rxjs/operators';
+import { LoadingController, ToastController } from '@ionic/angular';
+
 import { Items } from '@hnc/models/item.interface';
-import { Subscription } from 'rxjs';
+import * as fromTopStories from './reducers';
+import * as topStoriesActions from './actions/top-stories.action';
+import { select, Store } from '@ngrx/store';
 
 @Component({
   selector: 'hnc-top-stories',
@@ -9,83 +14,74 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./top-stories.page.scss'],
 })
 export class TopStoriesPage implements OnInit, OnDestroy {
-  items: Items = [];
-  subscription: Subscription | null = null;
+  items$: Observable<Items>;
 
-  private offset = 0;
-  private limit = 10;
+  private itemsLoading$: Observable<boolean>;
+  private idsLoading$: Observable<boolean>;
+  private error$: Observable<any>;
   private infiniteScrollComponent: any;
   private refresherComponent: any;
+  private loading: HTMLIonLoadingElement | null = null;
+  private subscriptions: Subscription[];
 
-  constructor(private itemService: ItemService) {}
+  constructor(
+    private store: Store<fromTopStories.State>,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
+  ) {
+    this.items$ = store.pipe(select(fromTopStories.getDisplayItems));
+    this.itemsLoading$ = store.pipe(select(fromTopStories.isItemsLoading));
+    this.idsLoading$ = store.pipe(select(fromTopStories.isTopStoriesLoading));
+    this.error$ = store.pipe(
+      select(fromTopStories.getError),
+      filter(err => !!err)
+    );
+
+    this.subscriptions = [];
+  }
 
   ngOnInit(): void {
-    this.subscription = this.itemService.get().subscribe((items) => {
-      this.items = items;
-    });
+    this.subscriptions.push(this.itemsLoading$.subscribe(loading => {
+      if (!loading) {
+        this.notifyScrollComplete();
+      }
+    }));
+
+    this.subscriptions.push(
+      this.idsLoading$.pipe(concatMap(loading => {
+        return loading ? from(this.showLoading()) : from(this.hideLoading());
+      })).subscribe()
+    );
+
+    this.subscriptions.push(
+      this.error$.pipe(concatMap(error => from(this.showError(error)))).subscribe()
+    );
 
     this.doLoad(true);
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
   load(event: any): void {
     this.infiniteScrollComponent = event.target;
 
-    this.next();
-  }
-
-
-  hasPrevious(): boolean {
-    return this.offset > 0;
-  }
-
-  previous(): void {
-    if (!this.hasPrevious()) {
-      return;
-    }
-
-    this.offset -= this.limit;
     this.doLoad(false);
-  }
-
-  hasNext(): boolean {
-    return this.items && this.offset + this.limit < 100;
-  }
-
-  next(): void {
-    if (!this.hasNext()) {
-      return;
-    }
-
-    this.offset += this.limit;
-    this.doLoad(false);
-  }
-
-  canRefresh(): boolean {
-    return !!this.items;
   }
 
   refresh(event: any): void {
     this.refresherComponent = event.target;
-    this.doRefresh();
-  }
 
-  private doRefresh(): void {
-    if (!this.canRefresh()) {
-      return;
-    }
-
-    this.offset = 0;
     this.doLoad(true);
   }
 
   private doLoad(refresh: boolean): void {
-    this.itemService.load({ offset: this.offset, limit: this.limit, refresh });
+    if (refresh) {
+      this.store.dispatch(topStoriesActions.refresh());
+    } else {
+      this.store.dispatch(topStoriesActions.loadMore());
+    }
   }
 
   private notifyScrollComplete(): void {
@@ -98,5 +94,30 @@ export class TopStoriesPage implements OnInit, OnDestroy {
     if (this.refresherComponent) {
       this.refresherComponent.complete();
     }
+  }
+
+  private showLoading(): Promise<void> {
+    return this.hideLoading()
+      .then(() => this.loadingCtrl.create({ message: 'Loading...', }))
+      .then(loading => {
+        this.loading = loading;
+        return this.loading.present();
+      });
+  }
+
+  private hideLoading(): Promise<void> {
+    if (this.loading) {
+      this.notifyRefreshComplete();
+      return this.loading.dismiss().then();
+    }
+    return Promise.resolve();
+  }
+
+  private showError(error: any): Promise<void> {
+    return this.toastCtrl.create({
+      message: `An error occurred: ${error}`,
+      duration: 3000,
+      keyboardClose: true,
+    }).then(toast => toast.present());
   }
 }

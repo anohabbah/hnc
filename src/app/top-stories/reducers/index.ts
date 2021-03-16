@@ -2,14 +2,13 @@ import {
   ActionReducerMap,
   createFeatureSelector,
   createSelector,
-  MetaReducer,
 } from '@ngrx/store';
-import { environment } from 'src/environments/environment';
 
 import * as fromRoot from '@hnc/reducers/item.reducer';
 import * as fromTopStories from './top-stories.reducer';
 import * as fromPagination from './pagination.reducer';
-import { getItemEntities, getError as getItemsError } from '@hnc/reducers/item.reducer';
+import * as fromItems from '@hnc/reducers/item.reducer';
+import {Items} from '@hnc/models/item.interface';
 
 export const stateFeatureKey = 'topStories';
 
@@ -27,13 +26,23 @@ export const reducers: ActionReducerMap<TopStoriesState> = {
   pagination: fromPagination.reducer,
 };
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
+// export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
 
 export const getTopStoriesState = createFeatureSelector<TopStoriesState>('topStories');
 
 export const getPaginationState = createSelector(
   getTopStoriesState,
   state => state.pagination,
+);
+
+export const isItemsLoading = createSelector(
+  fromItems.getItemsState,
+  fromItems.getLoading,
+);
+
+export const getItemsError = createSelector(
+  fromItems.getItemsState,
+  fromItems.getError,
 );
 
 export const getStoriesState = createSelector(
@@ -48,10 +57,13 @@ export const getStoryIds = createSelector(
 
 export const getDisplayItems = createSelector(
   getStoryIds,
-  getItemEntities,
+  fromItems.getItemEntities,
   getPaginationState,
   (ids, entities, pagination) => {
-    return ids.slice(0, pagination.offset + pagination.limit).map(id => entities[id]);
+    return ids
+      .slice(0, pagination.offset + pagination.limit)
+      .map(id => entities[id])
+      .filter(item => !!item) as Items;
   }
 );
 

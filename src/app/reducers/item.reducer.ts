@@ -1,5 +1,5 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import {Action, createFeatureSelector, createReducer, on} from '@ngrx/store';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 
 import * as ItemActions from '../actions/item.action';
 import { Item } from '@hnc/models/item.interface';
@@ -21,9 +21,15 @@ export const initialState: State = adapter.getInitialState({
 
 const itemReducer = createReducer(
   initialState,
-  on(ItemActions.load, (state) => ({ ...state, loading: true })),
-  on(ItemActions.loadSuccess, (state) => ({ ...state, loading: false, error: null })),
-  on(ItemActions.loadFail, (state, { payload }) => ({ ...state, loading: false, error: payload })),
+  on(ItemActions.load, (state) => ({...state, loading: true})),
+  on(ItemActions.loadSuccess, (state, { payload }) => adapter.upsertMany(
+    payload,
+    {
+      ...state,
+      loading: false,
+      error: null,
+    })),
+  on(ItemActions.loadFail, (state, {payload}) => ({...state, loading: false, error: payload})),
 );
 
 export function reducer(state: State | undefined, action: Action): State {
@@ -32,8 +38,20 @@ export function reducer(state: State | undefined, action: Action): State {
 
 export const getItemsState = createFeatureSelector<State>('items');
 
-export const { selectEntities: getItemEntities } = adapter.getSelectors(getItemsState);
+export const {
+  selectEntities: getItemEntities,
+} = adapter.getSelectors(getItemsState);
 
 export const getLoading = (state: State) => state.loading;
 
 export const getError = (state: State) => state.error;
+
+export const isItemsLoading = createSelector(
+  getItemsState,
+  getLoading,
+);
+
+export const getItemsError = createSelector(
+  getItemsState,
+  getError,
+);

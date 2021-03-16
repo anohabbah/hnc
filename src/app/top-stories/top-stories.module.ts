@@ -23,7 +23,7 @@ import * as fromState from './reducers';
     ComponentsModule,
     ServicesModule,
     EffectsModule.forFeature([TopStoriesEffects]),
-    StoreModule.forFeature(fromState.stateFeatureKey, fromState.reducers, { metaReducers: fromState.metaReducers })
+    StoreModule.forFeature(fromState.stateFeatureKey, fromState.reducers),
   ],
   declarations: [TopStoriesPage]
 })
