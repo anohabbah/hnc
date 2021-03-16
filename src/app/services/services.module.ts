@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ItemService} from '@hnc/services/item/item.service';
+import { ItemService } from '@hnc/services/item/item.service';
+import { OpenPageService } from '@hnc/services/open-page/open-page.service';
 
 
 
@@ -8,6 +9,6 @@ import {ItemService} from '@hnc/services/item/item.service';
   imports: [
     CommonModule
   ],
-  providers: [ItemService]
+  providers: [ItemService, OpenPageService]
 })
-export class ServicesModule { }
+export class ServicesModule {}

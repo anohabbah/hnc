@@ -9,7 +9,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <hnc-items [items]="items$ | async"></hnc-items>
+  <hnc-items [items]="items$ | async" (toOpen)="openPage($event)"></hnc-items>
 
   <ion-infinite-scroll (ionInfinite)="load($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>

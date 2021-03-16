@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import { Item } from '@hnc/models/item.interface';
 
@@ -10,4 +10,11 @@ import { Item } from '@hnc/models/item.interface';
 export class ItemsComponent {
   @Input()
   items!: Item[];
+
+  @Output()
+  toOpen = new EventEmitter<string>();
+
+  openPage(url: string): void {
+    return this.toOpen.emit(url);
+  }
 }

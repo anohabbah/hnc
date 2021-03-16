@@ -1,6 +1,6 @@
 <ion-list lines="full" *ngIf="items && items.length">
   <ion-item *ngFor="let item of items">
-    <hnc-item [item]="item"></hnc-item>
+    <hnc-item [item]="item" (toOpen)="openPage($event)"></hnc-item>
   </ion-item>
 </ion-list>
 

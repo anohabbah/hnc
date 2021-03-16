@@ -7,6 +7,7 @@ import { Items } from '@hnc/models/item.interface';
 import * as fromTopStories from './reducers';
 import * as topStoriesActions from './actions/top-stories.action';
 import { select, Store } from '@ngrx/store';
+import { OpenPageService } from '@hnc/services/open-page/open-page.service';
 
 @Component({
   selector: 'hnc-top-stories',
@@ -28,6 +29,7 @@ export class TopStoriesPage implements OnInit, OnDestroy {
     private store: Store<fromTopStories.State>,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
+    private openPageService: OpenPageService,
   ) {
     this.items$ = store.pipe(select(fromTopStories.getDisplayItems));
     this.itemsLoading$ = store.pipe(select(fromTopStories.isItemsLoading));
@@ -74,6 +76,10 @@ export class TopStoriesPage implements OnInit, OnDestroy {
     this.refresherComponent = event.target;
 
     this.doLoad(true);
+  }
+
+  openPage(url: string): void {
+    return this.openPageService.open(url);
   }
 
   private doLoad(refresh: boolean): void {
