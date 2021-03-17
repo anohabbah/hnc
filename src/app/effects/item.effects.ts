@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable, combineLatest, of } from 'rxjs';
@@ -7,10 +7,11 @@ import { Action } from '@ngrx/store';
 
 import * as ItemActions from '@hnc/actions/item.action';
 import { Item, Items } from '@hnc/models/item.interface';
+import {HACKER_NEWS_DB} from '@hnc/hackernews-db.token';
 
 @Injectable()
 export class ItemEffects {
-  constructor(private actions$: Actions, private db: AngularFireDatabase) {}
+  constructor(private actions$: Actions, @Inject(HACKER_NEWS_DB) private db: AngularFireDatabase) {}
 
   loadItems$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(ItemActions.load),

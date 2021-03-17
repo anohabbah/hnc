@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
-import {catchError, map, mergeMap, switchMap, take, withLatestFrom} from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { AngularFireDatabase } from '@angular/fire/database';
 
@@ -9,6 +9,7 @@ import * as ItemActions from '@hnc/actions/item.action';
 import * as fromTopStories from '@hnc/top-stories/reducers';
 import { pageSize } from '@hnc/top-stories/reducers/pagination.reducer';
 import * as TopStoriesActions from '@hnc/top-stories/actions/top-stories.action';
+import { HACKER_NEWS_DB } from '@hnc/hackernews-db.token';
 
 @Injectable()
 export class TopStoriesEffects {
@@ -47,7 +48,6 @@ export class TopStoriesEffects {
   constructor(
     private actions$: Actions,
     private store: Store<fromTopStories.State>,
-    private db: AngularFireDatabase,
-  ) {
-  }
+    @Inject(HACKER_NEWS_DB) private db: AngularFireDatabase,
+  ) {}
 }

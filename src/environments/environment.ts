@@ -4,9 +4,19 @@
 
 export const environment = {
   production: false,
-  firebase: {
+  hackernews_db: {
     databaseURL: 'https://hacker-news.firebaseio.com',
-  }
+  },
+  app_db: {
+    apiKey: 'AIzaSyBmXTfJmHR6aJofm5wwKJkA8bT88aAlLpk',
+    authDomain: 'trainings-288515.firebaseapp.com',
+    databaseURL: 'https://trainings-288515-default-rtdb.europe-west1.firebasedatabase.app',
+    projectId: 'trainings-288515',
+    storageBucket: 'trainings-288515.appspot.com',
+    messagingSenderId: '52209567527',
+    appId: '1:52209567527:web:86eeb8008d74e75e40cb02',
+    measurementId: 'G-0H6CXQKTZ2'
+  },
 };
 
 /*
