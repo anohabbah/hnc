@@ -3,7 +3,9 @@ import {AngularFireAuth} from '@angular/fire/auth';
 
 import firebase from 'firebase';
 
-import {EmailPasswordPair, NewAccount} from '@hnc/models/user.interface';
+import { EmailPasswordPair, NewAccount } from '@hnc/models/user.interface';
+
+export type LoginProvider = 'google' | 'facebook' | 'twitter' | 'github';
 
 @Injectable()
 export class AuthService {
