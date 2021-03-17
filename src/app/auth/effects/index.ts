@@ -14,8 +14,8 @@ import {
   loginRedirect,
   logout,
 } from '../actions';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
-import { EmailPasswordPair, NewAccount } from '@hnc/models/user.interface';
+import {catchError, filter, map, mergeMap, tap} from 'rxjs/operators';
+import {EmailPasswordPair, NewAccount, User} from '@hnc/models/user.interface';
 import {from, Observable, of} from 'rxjs';
 import { Action } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -58,7 +58,10 @@ export class AuthEffects {
     mergeMap((user: NewAccount) =>
       from(this.authService.create(user))
         .pipe(
-          mergeMap(createdUser => of<Action>(signupSuccess(), loginSuccess({payload: createdUser}))),
+          mergeMap(createdUser => of<Action>(
+            signupSuccess(),
+            loginSuccess({ payload: createdUser })
+          )),
           catchError(error => of(signupFailure(error)))
         )
     )

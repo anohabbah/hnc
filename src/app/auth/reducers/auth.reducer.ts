@@ -5,7 +5,7 @@ import * as AuthActions from '../actions';
 
 export interface State {
   loggedIn: boolean;
-  user: User | null;
+  user: User | null | undefined;
   logoutError: any;
 }
 

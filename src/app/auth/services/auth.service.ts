@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/auth';
+import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 import firebase from 'firebase';
 
@@ -11,9 +11,14 @@ export type LoginProvider = 'google' | 'facebook' | 'twitter' | 'github';
 export class AuthService {
   constructor(private afAuth: AngularFireAuth) {}
 
-  create({ email, password }: NewAccount): Promise<firebase.User> {
+  create({ email, password, name }: NewAccount): Promise<firebase.User | undefined> {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
-      .then(result => result.user as firebase.User);
+      .then(result =>
+        result.user?.updateProfile({
+          displayName: name,
+          photoURL: null,
+        }).then(() => result.user as firebase.User)
+      );
   }
 
   login({ email, password }: EmailPasswordPair): Promise<firebase.User> {
