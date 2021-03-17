@@ -11,6 +11,10 @@ const routes: Routes = [
     loadChildren: () => import('./comments/comments.module').then( m => m.CommentsPageModule)
   },
   {
+    path: 'security',
+    loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
+  },
+  {
     path: '',
     redirectTo: 'top-stories',
     pathMatch: 'full'

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/top-stories">
+        <ion-icon slot="icon-only" name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Log In</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #loginForm="ngForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input name="email" type="email" [(ngModel)]="email" required="true"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input name="password" type="password" [(ngModel)]="password" required="true"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-button
+          shape="round"
+          size="default"
+          [disabled]="loginForm.invalid || (loading$ | async)"
+          (click)="login(loginForm.value)"
+        >Log In</ion-button>
+      </ion-item>
+
+      <ion-item color="danger" *ngIf="error$ | async">
+        <p>{{ error$ | async }}</p>
+      </ion-item>
+
+      <ion-item routerLink="/signup">
+        <ion-icon name="person-add" slot="start"></ion-icon>
+        Sign Up
+      </ion-item>
+    </ion-list>
+  </form>
+</ion-content>
