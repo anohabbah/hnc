@@ -57,7 +57,8 @@ const favoritesReducer = createReducer(
       loading: false,
     },
   }, state)),
-  on(FavoritesActions.removeSuccess, FavoritesActions.addFailure, (state, action) => adapter.removeOne(action.payload, state))
+  on(FavoritesActions.removeSuccess, FavoritesActions.addFailure, (state, action) => adapter.removeOne(action.payload, state)),
+  on(FavoritesActions.clear, (state) => adapter.removeAll(state)),
 );
 
 export function reducer(state: State | undefined, action: Action): State {

@@ -8,6 +8,7 @@ import { FavoriteToggleComponent } from '@hnc/favorites/components/favorite-togg
 import { FavoriteTogglerComponent } from '@hnc/favorites/components/favorite-toggler/favorite-toggler.component';
 import {FavoritesService} from '@hnc/favorites/services/favorites.service';
 import {IonicModule} from '@ionic/angular';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 @NgModule({
     declarations: [FavoriteToggleComponent, FavoriteTogglerComponent],
@@ -17,6 +18,7 @@ import {IonicModule} from '@ionic/angular';
     imports: [
       CommonModule,
       IonicModule,
+      // AngularFireStorageModule,
       StoreModule.forFeature(fromState.stateFeatureKey, fromState.reducer),
       EffectsModule.forFeature([FavoritesEffectEffects])
     ],

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from '@hnc/auth/services/auth-guard.guard';
 
 const routes: Routes = [
   {
@@ -15,8 +16,9 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
   },
   {
-    path: 'favorites-list',
-    loadChildren: () => import('./favorites-list/favorites-list.module').then( m => m.FavoritesListPageModule)
+    path: 'favorites',
+    loadChildren: () => import('./favorites-list/favorites-list.module').then( m => m.FavoritesListPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: '',

@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as fromAuth from '@hnc/auth/reducers';
 import { FavoritesService } from '@hnc/favorites/services/favorites.service';
-import {Action, Store} from '@ngrx/store';
-import {from, Observable, of} from 'rxjs';
+import { Action, Store } from '@ngrx/store';
+import { from, Observable, of } from 'rxjs';
 import {
   add,
   addFailure,
   addSuccess,
   load,
-  loadSuccess, remove, removeFailure, removeSuccess
+  loadSuccess,
+  remove,
+  removeFailure,
+  removeSuccess
 } from '@hnc/favorites/actions/favorites.action';
-import {catchError, map, mergeMap, withLatestFrom} from 'rxjs/operators';
+import { catchError, map, mergeMap, withLatestFrom } from 'rxjs/operators';
 import * as ItemsActions from '@hnc/actions/item.action';
 import { Favorite } from '@hnc/favorites/models/favorite.interface';
 

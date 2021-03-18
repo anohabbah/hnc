@@ -3,6 +3,7 @@ import { Favorite } from '../models/favorite.interface';
 
 export enum FavoritesActionTypes {
   Load = '[Favorites] Load',
+  Clear = '[Favorites] Clear',
   LoadSuccess = '[Favorites] Load Success',
   LoadFailure = '[Favorites] Load Failure',
   Add = '[Favorites] Add',
@@ -30,3 +31,5 @@ export const remove = createAction(FavoritesActionTypes.Remove, props<{ payload:
 export const removeSuccess = createAction(FavoritesActionTypes.RemoveSuccess, props<{ payload: number }>());
 
 export const removeFailure = createAction(FavoritesActionTypes.RemoveFailure, props<{ payload: number }>());
+
+export const clear = createAction(FavoritesActionTypes.Clear);
