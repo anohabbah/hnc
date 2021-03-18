@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Favorite } from '@hnc/favorites/models/favorite.interface';
-import {map, take} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class FavoritesService {
   constructor(private firebaseStore: AngularFirestore) {}
 
-  add(userId: string, itemId: string): Promise<Favorite> {
+  add(userId: string, itemId: number): Promise<Favorite> {
     const timestamp = new Date().getTime();
     return  this.collection(userId)
       .doc(`${itemId}`)
@@ -22,18 +22,18 @@ export class FavoritesService {
       .delete();
   }
 
-  list(userId: string): Observable<Favorite[]> {
+  list(userId: string): Observable<any> {
     return this.collection(userId)
       .valueChanges()
       .pipe(
-        map<Partial<Favorite[]>>(value => {
+        map(value => {
           console.log(value);
           return value;
         })
       );
   }
 
-  private collection(userId: string): AngularFirestoreCollection<Favorite> {
+  private collection(userId: string): AngularFirestoreCollection<any> {
     return this.firebaseStore.collection('favorites')
       .doc(userId)
       .collection('items', ref => ref.orderBy('timestamp', 'desc'));

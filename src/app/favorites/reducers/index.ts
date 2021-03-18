@@ -1,21 +1,15 @@
 import {
-  ActionReducer,
   ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer
 } from '@ngrx/store';
-import { environment } from '../../environments/environment';
 
-export const stateFeatureKey = 'state';
+import * as fromFavorites from './favorites';
 
-export interface State {
+export const stateFeatureKey = 'favorites';
 
+export interface FavoritesState {
+  favorites: fromFavorites.State;
 }
 
-export const reducers: ActionReducerMap<State> = {
-
+export const reducers: ActionReducerMap<FavoritesState> = {
+  favorites: fromFavorites.reducer,
 };
-
-
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];

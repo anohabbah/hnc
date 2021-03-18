@@ -1,19 +1,14 @@
 import {
   Action,
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector, createReducer,
+  createFeatureSelector,
+  createReducer,
   createSelector,
-  MetaReducer, on
+  on
 } from '@ngrx/store';
 import * as FavoritesActions from '@hnc/favorites/actions/favorites.action';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import * as fromAuth from '../../auth/reducers';
 import { getItemEntities } from '@hnc/reducers/item.reducer';
-import { FavoritesService } from '../services/favorites.service';
-import {Favorite} from '@hnc/favorites/models/favorite.interface';
-import {act} from '@ngrx/effects';
-import {stat} from 'fs';
 
 export interface FavoritesItem {
   itemId: number;
@@ -75,11 +70,12 @@ export function reducer(state: State | undefined, action: Action): State {
 export const getFavoritesState = createFeatureSelector<State>('favorites');
 
 export const {
-  selectEntities: selectFavoriteEntities,
-  selectIds: selectFavorites,
+  selectEntities: selectEntities,
+  selectIds: selectIds,
 } = adapter.getSelectors(getFavoritesState);
+
 export const inFavorite = (itemId: number) => createSelector(
-  selectFavoriteEntities,
+  selectEntities,
   (entities) => {
     const entity = entities[itemId];
     return !entity?.loading;
@@ -87,13 +83,13 @@ export const inFavorite = (itemId: number) => createSelector(
 );
 
 export const getLoading = (itemId: number) => createSelector(
-  selectFavoriteEntities,
+  selectEntities,
   entities => entities[itemId]?.loading
 );
 
 export const getFavoriteItems = createSelector(
-  selectFavorites,
-  selectFavoriteEntities,
+  selectIds,
+  selectEntities,
   getItemEntities,
   (ids: number[], favorites, entities) =>
     ids
