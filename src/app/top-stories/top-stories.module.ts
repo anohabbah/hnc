@@ -13,6 +13,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { TopStoriesEffects } from './effects/top-stories.effects';
 import { StoreModule } from '@ngrx/store';
 import * as fromState from './reducers';
+import {FavoritesModule} from '@hnc/favorites/favorites.module';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import * as fromState from './reducers';
     TopStoriesPageRoutingModule,
     ComponentsModule,
     ServicesModule,
+    FavoritesModule,
     EffectsModule.forFeature([TopStoriesEffects]),
     StoreModule.forFeature(fromState.stateFeatureKey, fromState.reducers),
   ],

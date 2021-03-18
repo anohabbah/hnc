@@ -3,6 +3,7 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import * as fromAuth from '../../auth/reducers';
 import { getItemEntities } from '@hnc/reducers/item.reducer';
+import {Items} from '@hnc/models/item.interface';
 
 export const stateFeatureKey = 'favorites';
 
@@ -67,7 +68,7 @@ export const getFavoritesState = createFeatureSelector<State>('favorites');
 
 export const {
   selectEntities: selectFavoriteEntities,
-  selectIds: selectFavorites,
+  selectIds: selectFavorites
 } = adapter.getSelectors(getFavoritesState);
 
 
@@ -85,6 +86,10 @@ export const getFavoriteItems = createSelector(
   selectFavorites,
   selectFavoriteEntities,
   getItemEntities,
-  (ids: number[], favorites, entities) =>
-    ids.filter(id => !Boolean(favorites[id]?.loading)).map(id => entities[id])
-);
+  function(ids, favorites, entities) {
+    return ids
+      // @ts-ignore
+      .filter((id: number | string) => !favorites[id]?.loading)
+      .map((id: number | string) => entities[id]) as Items;
+  }
+)

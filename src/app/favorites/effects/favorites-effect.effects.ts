@@ -13,6 +13,7 @@ import {
 } from '@hnc/favorites/actions/favorites.action';
 import {catchError, map, mergeMap, withLatestFrom} from 'rxjs/operators';
 import * as ItemsActions from '@hnc/actions/item.action';
+import { Favorite } from '@hnc/favorites/models/favorite.interface';
 
 @Injectable()
 export class FavoritesEffectEffects {
@@ -22,10 +23,11 @@ export class FavoritesEffectEffects {
     mergeMap(([_, state]) => {
       const { auth: { auth: { user } } } = state;
 
+      // @ts-ignore
       return from(this.favoritesService.list(user.uid)).pipe(
         mergeMap(favorites => of<Action>(
           loadSuccess({ payload: favorites }),
-          ItemsActions.load({ payload: favorites.map(f => f.itemId) })
+          ItemsActions.load({ payload: favorites.map((f: Favorite) => f.itemId) })
         ))
       );
     })
@@ -38,6 +40,7 @@ export class FavoritesEffectEffects {
       const { auth: { auth: { user } } } = state;
       const itemId: number = action.payload;
 
+      // @ts-ignore
       return from(this.favoritesService.add(user.uid, itemId)).pipe(
         map(result => addSuccess({ payload: result })),
         catchError(() => of(addFailure({ payload: itemId })))
@@ -52,6 +55,7 @@ export class FavoritesEffectEffects {
       const { auth: { auth: { user } } } = state;
       const itemId = action.payload;
 
+      // @ts-ignore
       return from(this.favoritesService.remove(user.uid, itemId)).pipe(
         map(() => removeSuccess({ payload: itemId })),
         catchError(() => of(removeFailure({ payload: itemId })))

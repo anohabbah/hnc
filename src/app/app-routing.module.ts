@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
   },
   {
+    path: 'favorites-list',
+    loadChildren: () => import('./favorites-list/favorites-list.module').then( m => m.FavoritesListPageModule)
+  },
+  {
     path: '',
     redirectTo: 'top-stories',
     pathMatch: 'full'

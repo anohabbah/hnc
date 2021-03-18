@@ -8,14 +8,15 @@ import {IonicModule} from '@ionic/angular';
 import {CommentComponent} from '@hnc/components/comment/comment.component';
 import {CommentListComponent} from '@hnc/components/comment-list/comment-list.component';
 import {RouterModule} from '@angular/router';
+import {FavoritesModule} from '@hnc/favorites/favorites.module';
 
 const DECLARATIONS = [ItemComponent, ItemsComponent, CommentComponent, CommentListComponent];
 
 @NgModule({
   declarations: [...DECLARATIONS, TimeAgoPipe],
-  imports: [
-    CommonModule, IonicModule, RouterModule,
-  ],
+    imports: [
+        CommonModule, IonicModule, RouterModule, FavoritesModule,
+    ],
   exports: [...DECLARATIONS]
 })
 export class ComponentsModule { }
