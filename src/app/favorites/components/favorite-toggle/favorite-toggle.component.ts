@@ -12,7 +12,9 @@ export class FavoriteToggleComponent {
   @Output() toAdd: EventEmitter<number> = new EventEmitter<number>();
   @Output() toRemove: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor() {}
+  constructor() {
+    console.log(this.inFavorite);
+  }
 
   add(): void {
     this.toAdd.emit(this.itemId);

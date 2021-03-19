@@ -1,6 +1,6 @@
-import {Action, createReducer, on} from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 
-import {User} from '@hnc/models/user.interface';
+import { User } from '@hnc/models/user.interface';
 import * as AuthActions from '../actions';
 
 export interface State {
@@ -15,15 +15,12 @@ export const initialState: State = {
 
 const authReducer = createReducer(
   initialState,
-  on(AuthActions.loginSuccess, (state, { payload }) => {
-    console.log('logged user', payload);
-    return ({
-      ...state,
-      loggedIn: true,
-      user: payload,
-      logoutError: null,
-    });
-  }),
+  on(AuthActions.loginSuccess, (state, { payload }) => ({
+    ...state,
+    loggedIn: true,
+    user: payload,
+    logoutError: null,
+  })),
   on(AuthActions.logoutSuccess, () => initialState),
   on(AuthActions.loginFailure, (state, { payload }) => ({
     ...state,

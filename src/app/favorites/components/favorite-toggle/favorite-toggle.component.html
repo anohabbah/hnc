@@ -1,11 +1,15 @@
 <span>
-  <ion-spinner *ngIf="loading"></ion-spinner>
+  <ion-spinner *ngIf="loading; else notLoading"></ion-spinner>
 
-  <ion-button fill="clear" *ngIf="!loading && inFavorite" (click)="remove()">
-    <ion-icon slot="icon-only" name="heart" color="danger"></ion-icon>
-  </ion-button>
+  <ng-template #notLoading>
+    <ion-button fill="clear" *ngIf="inFavorite; else notInFavorite" (click)="remove()">
+      <ion-icon slot="icon-only" name="heart" color="danger"></ion-icon>
+    </ion-button>
 
-  <ion-button fill="clear" class="btnLike" *ngIf="!loading && !inFavorite" (click)="add()">
-    <ion-icon slot="icon-only" name="heart-outline" color="danger"></ion-icon>
-  </ion-button>
+    <ng-template #notInFavorite>
+      <ion-button fill="clear" class="btnLike" (click)="add()">
+        <ion-icon slot="icon-only" name="heart-outline" color="danger"></ion-icon>
+      </ion-button>
+    </ng-template>
+  </ng-template>
 </span>

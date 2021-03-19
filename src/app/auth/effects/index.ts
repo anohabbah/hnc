@@ -30,16 +30,13 @@ export class AuthEffects {
       from(this.authService.login(pair))
         .pipe(
           mergeMap(user => {
-            console.log('passed user', user);
+            // TODO: Caution ! make use to never return firebase.User to ngrx.
             return of<Action>(
               loginSuccess({ payload: user }),
               load(),
             );
           }),
-          catchError(error => {
-            console.log('error after logged in', error);
-            return of(loginFailure({ payload: error }));
-          })
+          catchError(error =>  of(loginFailure({ payload: error })))
         )
     )
   ));

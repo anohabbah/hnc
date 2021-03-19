@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 
-import firebase from 'firebase';
-
-import { EmailPasswordPair, NewAccount } from '@hnc/models/user.interface';
+import { EmailPasswordPair, NewAccount, User } from '@hnc/models/user.interface';
 
 export type LoginProvider = 'google' | 'facebook' | 'twitter' | 'github';
 
@@ -11,20 +9,25 @@ export type LoginProvider = 'google' | 'facebook' | 'twitter' | 'github';
 export class AuthService {
   constructor(private afAuth: AngularFireAuth) {}
 
-  create({ email, password, name }: NewAccount): Promise<firebase.User | undefined> {
+  create({ email, password, name }: NewAccount): Promise<User | undefined> {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then(result =>
         result.user?.updateProfile({
           displayName: name,
           photoURL: null,
-        }).then(() => result.user as firebase.User)
+        }).then(() => result.user as User)
       );
   }
 
-  login({ email, password }: EmailPasswordPair): Promise<firebase.User> {
+  login({ email, password }: EmailPasswordPair): Promise<User | undefined> {
     return this.afAuth.signInWithEmailAndPassword(email, password)
-      .then(result => {
-        return result.user as firebase.User;
+      .then(({ user: authUser }) => {
+        return authUser ? {
+          uid: authUser.uid,
+          displayName: authUser.displayName,
+          email: authUser.email,
+          photoURL: authUser.photoURL,
+        } : undefined;
       })
       .catch(err => {
         console.log('failed on login', err);

@@ -1,9 +1,16 @@
-import * as FavoritesActions from '../actions/favorites.action';
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
-import * as fromAuth from '../../auth/reducers';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+
+import * as FavoritesActions from '../actions/favorites.action';
 import { getItemEntities } from '@hnc/reducers/item.reducer';
-import {Items} from '@hnc/models/item.interface';
+import { Items } from '@hnc/models/item.interface';
+
+
+
+
+
+import * as fromAuth from '../../auth/reducers';
+import {timestamp} from 'rxjs/operators';
 
 export const stateFeatureKey = 'favorites';
 
@@ -57,7 +64,11 @@ const favoritesReducer = createReducer(
       loading: false,
     },
   }, state)),
-  on(FavoritesActions.removeSuccess, FavoritesActions.addFailure, (state, action) => adapter.removeOne(action.payload, state)),
+  on(
+    FavoritesActions.removeSuccess,
+    FavoritesActions.addFailure,
+    (state, action) => adapter.removeOne(action.payload, state)
+  ),
   on(FavoritesActions.clear, (state) => adapter.removeAll(state)),
 );
 
@@ -75,7 +86,7 @@ export const {
 
 export const inFavorite = (itemId: number) => createSelector(
   selectFavoriteEntities,
-  entities => !Boolean(entities[itemId]?.loading)
+  entities => !!(entities[itemId] && !entities[itemId]?.loading)
 );
 
 export const getLoading = (itemId: number) => createSelector(
@@ -90,7 +101,7 @@ export const getFavoriteItems = createSelector(
   function(ids, favorites, entities) {
     return ids
       // @ts-ignore
-      .filter((id: number | string) => !favorites[id]?.loading)
-      .map((id: number | string) => entities[id]) as Items;
+      .filter((id: number | string) => !!favorites[id] && !favorites[id].loading)
+      .map((id: number | string) => entities[id]);
   }
-)
+);

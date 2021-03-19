@@ -11,8 +11,8 @@ import {EmailPasswordPair} from '@hnc/models/user.interface';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  email = 'anohabbah@gmail.com';
-  password = '123456789';
+  email = '';
+  password = '';
   loading$: Observable<boolean>;
   error$: Observable<any>;
 
