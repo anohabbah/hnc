@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { AuthService } from '../services/auth.service';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+
+import { AuthService } from '@hnc/auth/services/auth.service';
 import {
   login,
   loginFailure,
@@ -12,8 +14,7 @@ import {
   signup,
   signupFailure,
   signupSuccess,
-} from '../actions';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+} from '@hnc/auth/actions/index';
 import { EmailPasswordPair, NewAccount } from '@hnc/models/user.interface';
 import { from, Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
@@ -28,11 +29,14 @@ export class AuthEffects {
     mergeMap((pair: EmailPasswordPair) =>
       from(this.authService.login(pair))
         .pipe(
-          mergeMap(user => of<Action>(
-            loginSuccess({payload: user}),
-            load(),
-          )),
-          catchError(error => of(loginFailure({payload: error})))
+          mergeMap(user => {
+            console.log('passed user', user);
+            return of<Action>(
+              loginSuccess({ payload: user }),
+              load(),
+            );
+          }),
+          catchError(error => of(loginFailure({ payload: error })))
         )
     )
   ));
@@ -47,7 +51,7 @@ export class AuthEffects {
             signupSuccess(),
             loginSuccess({ payload: createdUser })
           )),
-          catchError(error => of(signupFailure(error)))
+          catchError(error => of(signupFailure({ payload: error })))
         )
     )
   ));
@@ -82,9 +86,7 @@ export class AuthEffects {
   loginRedirect$ = createEffect(
     () => this.action$.pipe(
       ofType(loginRedirect, logout),
-      tap(() => {
-        this.router.navigate(['/login']);
-      })
+      tap(() => this.router.navigate(['/login']))
     ),
     { dispatch: false }
   );

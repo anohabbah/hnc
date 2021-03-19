@@ -6,36 +6,40 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class FavoritesService {
-  constructor(private firebaseStore: AngularFirestore) {}
+  private static readonly PARENT_COLLECTION_NAME = 'favorites';
+  private static readonly CHILD_COLLECTION_NAME = 'items';
+  private collection: AngularFirestoreCollection<any>;
+
+  constructor(private afs: AngularFirestore) {
+    this.collection = afs.collection(FavoritesService.PARENT_COLLECTION_NAME);
+  }
 
   add(userId: string, itemId: number): Promise<Favorite> {
     const timestamp = new Date().getTime();
-    return  this.collection(userId)
+    return this.getUserCollection(userId)
       .doc(`${itemId}`)
-      .set({ timestamp })
-      .then(() => ({ itemId, timestamp }));
+      .set({timestamp})
+      .then(() => ({itemId, timestamp}));
   }
 
   remove(userId: string, itemId: number): Promise<void> {
-    return this.collection(userId)
+    return this.getUserCollection(userId)
       .doc(`${itemId}`)
       .delete();
   }
 
-  list(userId: string): Observable<any> {
-    return this.collection(userId)
-      .valueChanges()
-      .pipe(
-        map(value => {
-          console.log(value);
-          return value;
-        })
-      );
+  list(userId: string): Observable<Favorite[]> {
+    return this.getUserCollection(userId)
+      .get().pipe(
+        map(snap => snap.docs.map(value => ({
+          itemId: Number(value.id),
+          timestamp: value.data().timestamp,
+        }))));
   }
 
-  private collection(userId: string): AngularFirestoreCollection<any> {
-    return this.firebaseStore.collection('favorites')
+  private getUserCollection(userId: string): AngularFirestoreCollection<{ timestamp: number }> {
+    return this.collection
       .doc(userId)
-      .collection('items', ref => ref.orderBy('timestamp', 'desc'));
+      .collection<{ timestamp: number }>(FavoritesService.CHILD_COLLECTION_NAME, ref => ref.orderBy('timestamp', 'desc'));
   }
 }

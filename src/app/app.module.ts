@@ -4,20 +4,20 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { EffectsModule } from '@ngrx/effects';
+import { AngularFireModule } from '@angular/fire';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
-import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/database';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { EffectsModule } from '@ngrx/effects';
 import { CustomRouterStateSerializer, reducers } from './reducers';
 import { ItemEffects } from './effects/item.effects';
-import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { HACKER_NEWS_DB } from '@hnc/hackernews-db.token';
-import {AngularFireAuthModule} from '@angular/fire/auth';
 
 @NgModule({
   declarations: [AppComponent],

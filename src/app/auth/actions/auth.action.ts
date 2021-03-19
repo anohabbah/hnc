@@ -28,7 +28,7 @@ export const loginWithProvider = createAction(
 
 export const loginSuccess = createAction(
   AuthActionTypes.LoginSuccess,
-  props<{ payload?: User }>()
+  props<{ payload: User | undefined }>()
 );
 
 export const loginFailure = createAction(

@@ -25,6 +25,7 @@ export class FavoritesEffectEffects {
     withLatestFrom(this.store),
     mergeMap(([_, state]) => {
       const { auth: { auth: { user } } } = state;
+      console.log('current state', state);
 
       // @ts-ignore
       return from(this.favoritesService.list(user.uid)).pipe(

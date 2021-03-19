@@ -23,7 +23,13 @@ export class AuthService {
 
   login({ email, password }: EmailPasswordPair): Promise<firebase.User> {
     return this.afAuth.signInWithEmailAndPassword(email, password)
-      .then(result => result.user as firebase.User);
+      .then(result => {
+        return result.user as firebase.User;
+      })
+      .catch(err => {
+        console.log('failed on login', err);
+        throw new Error('something went wrong.');
+      });
   }
 
   logout(): Promise<any> {

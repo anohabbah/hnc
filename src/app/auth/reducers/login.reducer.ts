@@ -14,11 +14,14 @@ export const initialState: State = {
 const loginReducer: ActionReducer<State> = createReducer(
   initialState,
   on(login, (state) => ({ ...state, error: null, loading: true })),
-  on(loginSuccess, (state) => ({
-    ...state,
-    error: null,
-    loading: false,
-  })),
+  on(loginSuccess, (state) => {
+    console.log('login succeed');
+    return ({
+      ...state,
+      error: null,
+      loading: false,
+    });
+  }),
   on(loginFailure, (state, { payload }) => ({
     ...state,
     error: payload,
