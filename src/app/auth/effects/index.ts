@@ -36,7 +36,10 @@ export class AuthEffects {
               load(),
             );
           }),
-          catchError(error => of(loginFailure({ payload: error })))
+          catchError(error => {
+            console.log('error after logged in', error);
+            return of(loginFailure({ payload: error }));
+          })
         )
     )
   ));

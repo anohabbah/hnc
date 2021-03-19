@@ -11,6 +11,7 @@ import { AngularFireModule } from '@angular/fire';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,7 @@ import { HACKER_NEWS_DB } from '@hnc/hackernews-db.token';
     AngularFireModule.initializeApp(environment.app_db),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFirestoreModule,
     StoreModule.forRoot(reducers),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     EffectsModule.forRoot([ItemEffects]),

@@ -28,7 +28,7 @@ export class FavoritesEffectEffects {
       console.log('current state', state);
 
       // @ts-ignore
-      return from(this.favoritesService.list(user.uid)).pipe(
+      return from(this.favoritesService.list(user?.uid)).pipe(
         mergeMap(favorites => of<Action>(
           loadSuccess({ payload: favorites }),
           ItemsActions.load({ payload: favorites.map((f: Favorite) => f.itemId) })
