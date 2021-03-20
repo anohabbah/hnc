@@ -7,13 +7,15 @@ import { Item } from '@hnc/models/item.interface';
   styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent  {
-  @Input()
-  item!: Item;
-
-  @Output()
-  toOpen = new EventEmitter<string>();
+  @Input() item!: Item;
+  @Output() toOpen = new EventEmitter<string>();
+  @Output() toShare = new EventEmitter<Item>();
 
   openPage(url: string): void {
-    return this.toOpen.emit(url);
+    this.toOpen.emit(url);
+  }
+
+  share(): void {
+    this.toShare.emit(this.item);
   }
 }

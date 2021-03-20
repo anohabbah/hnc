@@ -4,6 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { EffectsModule } from '@ngrx/effects';
@@ -50,6 +51,7 @@ import { HACKER_NEWS_DB } from '@hnc/hackernews-db.token';
       deps: [PLATFORM_ID, NgZone]
     },
     InAppBrowser,
+    SocialSharing,
   ],
   bootstrap: [AppComponent],
 })

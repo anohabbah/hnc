@@ -2,12 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { from, Observable, Subscription } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { select, Store } from '@ngrx/store';
 
-import { Items } from '@hnc/models/item.interface';
+import { Item, Items } from '@hnc/models/item.interface';
 import * as fromTopStories from './reducers';
 import * as topStoriesActions from './actions/top-stories.action';
-import { select, Store } from '@ngrx/store';
 import { OpenPageService } from '@hnc/services/open-page/open-page.service';
+import { SocialSharingService } from '@hnc/services/social-sharing/social-sharing.service';
 
 @Component({
   selector: 'hnc-top-stories',
@@ -30,6 +31,7 @@ export class TopStoriesPage implements OnInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private openPageService: OpenPageService,
+    private socialSharing: SocialSharingService,
   ) {
     this.items$ = store.pipe(select(fromTopStories.getDisplayItems));
     this.itemsLoading$ = store.pipe(select(fromTopStories.isItemsLoading));
@@ -80,6 +82,10 @@ export class TopStoriesPage implements OnInit, OnDestroy {
 
   openPage(url: string): void {
     return this.openPageService.open(url);
+  }
+
+  share(item: Item): Promise<void> {
+    return this.socialSharing.share(item.title, item.url);
   }
 
   private doLoad(refresh: boolean): void {

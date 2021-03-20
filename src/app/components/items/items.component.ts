@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Item } from '@hnc/models/item.interface';
+import { Item, Items } from '@hnc/models/item.interface';
 
 @Component({
   selector: 'hnc-items',
@@ -8,13 +8,15 @@ import { Item } from '@hnc/models/item.interface';
   styleUrls: ['./items.component.scss'],
 })
 export class ItemsComponent {
-  @Input()
-  items!: Item[];
-
-  @Output()
-  toOpen = new EventEmitter<string>();
+  @Input() items!: Items;
+  @Output() toOpen = new EventEmitter<string>();
+  @Output() toShare = new EventEmitter<Item>();
 
   openPage(url: string): void {
-    return this.toOpen.emit(url);
+    this.toOpen.emit(url);
+  }
+
+  share(item: Item): void {
+    this.toShare.emit(item);
   }
 }
