@@ -1,10 +1,8 @@
 import {
   Action,
   ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector, createReducer,
-  createSelector,
-  MetaReducer, on
+  createReducer,
+  on
 } from '@ngrx/store';
 
 import * as CommentActions from '../actions/comments.action';
@@ -15,7 +13,7 @@ export interface State {
 
 const initialState: State = { selectedItemId: -1 };
 
-const commentReducer = createReducer(
+const commentReducer: ActionReducer<State> = createReducer(
   initialState,
   on(CommentActions.loadSuccess, (state, { payload }) => ({ ...state, selectedItemId: payload.id })),
 );

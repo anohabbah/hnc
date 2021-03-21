@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -10,10 +10,11 @@ import * as CommentActions from '../actions';
 import * as ItemsActions from '@hnc/actions/item.action';
 import { Item } from '@hnc/models/item.interface';
 import { pageSize } from '@hnc/comments/reducers/pagination.reducer';
+import { HACKER_NEWS_DB } from '@hnc/hackernews-db.token';
 
 @Injectable()
 export class CommentsEffectEffects {
-  loadComment$: Observable<Action> = createEffect(() => this.actions$.pipe(
+  loadComments$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(CommentActions.select),
     map(({ payload }) => payload),
     switchMap((selectedItemId: number) =>
@@ -43,6 +44,6 @@ export class CommentsEffectEffects {
   constructor(
     private actions$: Actions,
     private store: Store<fromComments.State>,
-    private db: AngularFireDatabase,
+    @Inject(HACKER_NEWS_DB) private db: AngularFireDatabase,
   ) {}
 }

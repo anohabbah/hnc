@@ -32,8 +32,7 @@ export class CommentsPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(this.itemsLoading$.
-    subscribe(loading => {
+    this.subscriptions.push(this.itemsLoading$.subscribe(loading => {
       if (!loading) {
         this.notifyScrollComplete();
       }
