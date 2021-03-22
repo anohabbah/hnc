@@ -1,42 +1,29 @@
-<ion-card *ngIf="item">
-  <ion-grid>
+<ion-card *ngIf="!!item">
+  <ion-card-header class="ion-no-padding">
+    <ion-card-title>{{ item.title }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-footer class="ion-padding-top">
     <ion-row>
-      <ion-col>
-        <h2 class="title" (click)="openPage(item.url)">{{ item.title }}</h2>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
+      <ion-col class="ion-text-center">
         <ion-icon name="bulb"></ion-icon>
-        {{ item.score }}
+        <ion-label>{{ item.score }}</ion-label>
       </ion-col>
-      <ion-col>
+      <ion-col class="ion-text-center">
         <ion-icon name="person"></ion-icon>
-        {{ item.by }}
+        <ion-label>{{ item.by }}</ion-label>
       </ion-col>
-      <ion-col>
+      <ion-col class="ion-text-center">
         <ion-icon name="time"></ion-icon>
-        {{ item.time | timeAgo }} ago
+        <ion-label>{{ item.time | timeAgo }} ago</ion-label>
       </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <hnc-favorite-toggler [itemId]="item.id"></hnc-favorite-toggler>
-      </ion-col>
-      <ion-col>
-        <ion-button [fill]="'clear'" (click)="share()">
-          <ion-icon slot="start" name="share"></ion-icon>
-          Share
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button *ngIf="item.kids" [fill]="'clear'" [routerLink]="['/comments', item.id]">
-          <ion-icon slot="icon-only" name="chatbubbles"></ion-icon>
-          {{ item.kids.length }}
+      <ion-col class="ion-text-center">
+        <ion-button (click)="presentActions()" fill="clear" color="medium" hncClickStopPropagation>
+          <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-footer>
 </ion-card>
 <ion-card *ngIf="!item">
   <ion-card-header>Loading...</ion-card-header>
