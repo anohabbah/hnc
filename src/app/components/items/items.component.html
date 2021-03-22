@@ -1,5 +1,5 @@
-<ion-list lines="full" *ngIf="!!items && items.length">
-  <ion-item *ngFor="let item of items" [button]="true" (click)="openPage(item.url)">
+<ion-list lines="none" *ngIf="!!items && items.length">
+  <ion-item *ngFor="let item of items" (click)="openPage(item.url)">
     <hnc-item [item]="item" (toShare)="share($event)"></hnc-item>
   </ion-item>
 </ion-list>
